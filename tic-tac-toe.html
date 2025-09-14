@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First Tic Tac Toe Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .game-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-selection {
+            margin-bottom: 20px;
+        }
+
+        .mode-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .mode-button:hover {
+            background-color: #45a049;
+        }
+
+        .mode-button.active {
+            background-color: #2196F3;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 90px;
+            height: 90px;
+            background-color: #e0e0e0;
+            border: 2px solid #333;
+            font-size: 36px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cell:hover {
+            background-color: #d0d0d0;
+        }
+
+        .cell.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .game-info {
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .reset-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .reset-button:hover {
+            background-color: #da190b;
+        }
+
+        .winner-message {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+
+        .turn-indicator {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎮 Maksim's 1st Tic Tac Toe Game 🎮</h1>
+
+        <div class="mode-selection">
+            <h3>Choose Game Mode:</h3>
+            <button class="mode-button active" onclick="setGameMode('player')">👥 Player vs Player</button>
+            <button class="mode-button" onclick="setGameMode('computer')">🤖 Player vs Computer</button>
+        </div>
+
+        <div class="game-info">
+            <div id="current-player" class="turn-indicator">Player X's Turn</div>
+            <div id="winner-message" class="winner-message" style="display: none;"></div>
+        </div>
+
+        <div class="game-board" id="game-board">
+            <div class="cell" onclick="makeMove(0)"></div>
+            <div class="cell" onclick="makeMove(1)"></div>
+            <div class="cell" onclick="makeMove(2)"></div>
+            <div class="cell" onclick="makeMove(3)"></div>
+            <div class="cell" onclick="makeMove(4)"></div>
+            <div class="cell" onclick="makeMove(5)"></div>
+            <div class="cell" onclick="makeMove(6)"></div>
+            <div class="cell" onclick="makeMove(7)"></div>
+            <div class="cell" onclick="makeMove(8)"></div>
+        </div>
+
+        <button class="reset-button" onclick="resetGame()">🔄 Start New Game</button>
+    </div>
+
+    <script>
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameMode = 'player'; // 'player' or 'computer'
+        let gameActive = true;
+
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            resetGame();
+
+            // Update button styles
+            const buttons = document.querySelectorAll('.mode-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            if (mode === 'player') {
+                buttons[0].classList.add('active');
+            } else {
+                buttons[1].classList.add('active');
+            }
+        }
+
+        function makeMove(cellIndex) {
+            if (gameBoard[cellIndex] !== '' || !gameActive) {
+                return;
+            }
+
+            gameBoard[cellIndex] = currentPlayer;
+            document.querySelectorAll('.cell')[cellIndex].textContent = currentPlayer;
+
+            if (checkWinner()) {
+                endGame(`🎉 Player ${currentPlayer} Wins! 🎉`);
+                return;
+            }
+
+            if (checkTie()) {
+                endGame("🤝 It's a Tie! 🤝");
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            updateGameInfo();
+
+            // If it's computer mode and now it's O's turn (computer's turn)
+            if (gameMode === 'computer' && currentPlayer === 'O' && gameActive) {
+                setTimeout(makeComputerMove, 500); // Small delay for better UX
+            }
+        }
+
+        function makeComputerMove() {
+            const availableCells = [];
+            for (let i = 0; i < gameBoard.length; i++) {
+                if (gameBoard[i] === '') {
+                    availableCells.push(i);
+                }
+            }
+
+            if (availableCells.length === 0) return;
+
+            // Simple AI: try to win, then try to block, then random
+            let moveIndex = findWinningMove('O'); // Try to win
+            if (moveIndex === -1) {
+                moveIndex = findWinningMove('X'); // Try to block player
+            }
+            if (moveIndex === -1) {
+                // Random move
+                moveIndex = availableCells[Math.floor(Math.random() * availableCells.length)];
+            }
+
+            gameBoard[moveIndex] = currentPlayer;
+            document.querySelectorAll('.cell')[moveIndex].textContent = currentPlayer;
+
+            if (checkWinner()) {
+                endGame(`🤖 Computer Wins! 🤖`);
+                return;
+            }
+
+            if (checkTie()) {
+                endGame("🤝 It's a Tie! 🤝");
+                return;
+            }
+
+            currentPlayer = 'X';
+            updateGameInfo();
+        }
+
+        function findWinningMove(player) {
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                const line = [gameBoard[a], gameBoard[b], gameBoard[c]];
+
+                // Check if we can win/block in this line
+                if (line.filter(cell => cell === player).length === 2 &&
+                    line.filter(cell => cell === '').length === 1) {
+                    // Find the empty spot
+                    if (gameBoard[a] === '') return a;
+                    if (gameBoard[b] === '') return b;
+                    if (gameBoard[c] === '') return c;
+                }
+            }
+            return -1;
+        }
+
+        function checkWinner() {
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function checkTie() {
+            return gameBoard.every(cell => cell !== '');
+        }
+
+        function endGame(message) {
+            gameActive = false;
+            document.getElementById('winner-message').textContent = message;
+            document.getElementById('winner-message').style.display = 'block';
+            document.getElementById('current-player').style.display = 'none';
+
+            // Disable all cells
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.add('disabled');
+            });
+        }
+
+        function updateGameInfo() {
+            if (gameActive) {
+                if (gameMode === 'player') {
+                    document.getElementById('current-player').textContent = `Player ${currentPlayer}'s Turn`;
+                } else {
+                    if (currentPlayer === 'X') {
+                        document.getElementById('current-player').textContent = "Your Turn (X)";
+                    } else {
+                        document.getElementById('current-player').textContent = "Computer's Turn (O)";
+                    }
+                }
+            }
+        }
+
+        function resetGame() {
+            currentPlayer = 'X';
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('disabled');
+            });
+
+            document.getElementById('winner-message').style.display = 'none';
+            document.getElementById('current-player').style.display = 'block';
+            updateGameInfo();
+        }
+    </script>
+</body>
+</html>
