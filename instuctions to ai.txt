@@ -1,0 +1,8 @@
+I am a child 11 year old. I don't know anything about programming.
+Help me build very simple, my first game Tic Tac Toe.
+Requirements:
+1. single file game
+2. run in browser
+3. very simple (HTML + JS)
+4. two options: 1 vs 1 and 1 vs computer
+5. ready to deploy to my remote web server
