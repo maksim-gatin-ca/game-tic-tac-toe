@@ -43,7 +43,6 @@ This project taught me:
 ![Player vs Computer](images/vs-computer.png)
 
 
-*Screenshots coming soon! Take a picture of your game in action.*
 
 ## 🎉 About This Project
 
