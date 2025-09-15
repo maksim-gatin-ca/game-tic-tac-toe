@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a single-file HTML Tic Tac Toe game designed as a first programming project for an 11-year-old. The entire game is contained in `tic-tac-toe.html` with embedded CSS and JavaScript.
+This is a single-file HTML Tic Tac Toe game designed as a first programming project for an 11-year-old. The entire game is contained in `index.html` with embedded CSS and JavaScript.
 
 ## Architecture
 
@@ -33,8 +33,8 @@ The game follows a simple monolithic structure:
 ## Development Commands
 
 Since this is a single HTML file, no build process is required:
-- **Run locally**: Open `tic-tac-toe.html` in any web browser
-- **Deploy**: Upload `tic-tac-toe.html` to any web server
+- **Run locally**: Open `index.html` in any web browser
+- **Deploy**: Upload `index.html` to any web server
 
 ## Code Conventions
 
@@ -48,7 +48,7 @@ Since this is a single HTML file, no build process is required:
 
 ```
 /
-├── tic-tac-toe.html    # Complete game in single file
+├── index.html          # Complete game in single file
 ├── README.md           # Project documentation
 ├── images/             # Screenshots for README
 └── instuctions to ai.txt # Original project requirements

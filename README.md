@@ -15,7 +15,7 @@ My very first programming project! A fun and simple Tic Tac Toe game that runs i
 
 ## 🎯 How to Play
 
-1. Open `tic-tac-toe.html` in your web browser
+1. Open `index.html` in your web browser
 2. Choose your game mode (Player vs Player or Player vs Computer)
 3. Click on empty squares to place your X or O
 4. Try to get 3 in a row (horizontal, vertical, or diagonal)
@@ -23,7 +23,7 @@ My very first programming project! A fun and simple Tic Tac Toe game that runs i
 
 ## 🚀 How to Deploy
 
-1. Upload `tic-tac-toe.html` to your web server
+1. Upload `index.html` to your web server
 2. Share the link with friends
 3. Play anywhere, anytime!
 
