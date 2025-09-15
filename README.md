@@ -38,10 +38,10 @@ This project taught me:
 
 ## 📸 Screenshots
 
-<!-- Add screenshots here:
+Add screenshots here:
 ![Game Screenshot](images/game-screenshot.png)
 ![Player vs Computer](images/vs-computer.png)
--->
+
 
 *Screenshots coming soon! Take a picture of your game in action.*
 
